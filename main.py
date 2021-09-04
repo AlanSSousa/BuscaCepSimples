@@ -1,19 +1,30 @@
 from ConexaoBanco import *
 from BuscaCep import *
 
-cep = input("Digite o cep\n")
+continua = True
+while (continua) :
 
-rs = ConexaoBanco.consultacep(ConexaoBanco,cep)
+    cep = str(input("Digite um cep válido\n"))
 
-encontrou = False
-for linha in rs:
-    encontrou = True
+    if(len(cep) == 8):
 
-if(not encontrou):
-    bc = BuscaCep.getdadoscep(BuscaCep,cep)
-    ConexaoBanco.inserecep(ConexaoBanco, bc)
-    rs = ConexaoBanco.consultacep(ConexaoBanco,cep)
+        rs = ConexaoBanco.consultacep(ConexaoBanco,cep)
 
-for linha in rs:
-  print (linha)
+        encontrou = False
+        for linha in rs:
+            encontrou = True
 
+        if(not encontrou):
+            bc = BuscaCep.getdadoscep(BuscaCep,cep)
+            if(bc['erro'] == True):
+                print('CEP não econtrado.')
+                continue;
+
+            ConexaoBanco.inserecep(ConexaoBanco, bc)
+            rs = ConexaoBanco.consultacep(ConexaoBanco,cep)
+
+        for linha in rs:
+            print (linha)
+
+        if(input("Para buscar mais ceps digite 1 e tecle enter\nPara sair do sistema digite qualquer outra coisa\n") != "1"):
+            continua = False
