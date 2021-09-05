@@ -3,30 +3,49 @@ from ConexaoBanco import *
 from BuscaCep import *
 
 def checaCep(cepFormatado):
-    rs = ConexaoBanco.consultacep(ConexaoBanco, cepFormatado)
-
-    encontrou = False
-    for linha in rs:
-        encontrou = True
-
-    if (not encontrou):
-        bc = BuscaCep.getdadoscep(BuscaCep, cepFormatado)
-
-        ConexaoBanco.inserecep(ConexaoBanco, bc)
+    try:
         rs = ConexaoBanco.consultacep(ConexaoBanco, cepFormatado)
 
+        encontrou = False
+        for linha in rs:
+            encontrou = True
+
+        if (not encontrou):
+            bc = BuscaCep.getdadoscep(BuscaCep, cepFormatado)
+
+            ConexaoBanco.inserecep(ConexaoBanco, bc)
+            rs = ConexaoBanco.consultacep(ConexaoBanco, cepFormatado)
+
+        for linha in rs:
+            localidade['text'] = linha['localidade']
+            UF['text'] = linha['uf']
+            ibge['text'] = linha['ibge']
+            ddd['text'] = linha['ddd']
+            siafi['text'] = linha['siafi']
+    except:
+        janela_erro = Tk()
+        janela_erro.title("Atenção")
+        janela_erro.geometry("120x40+600+300")
+        janela_erro.resizable(False, False)
+        janela_erro.iconbitmap("images/mapa.ico")
+        janela_erro['bg'] = "red"
+
+        texto_erro = Label(janela_erro, text="Algo deu errado", bg="red", fg="white")
+        texto_erro.grid(column=0, row=0, padx=10, pady=10)
+        janela_erro.mainloop()
+
+def criaLista():
+    rs = ConexaoBanco.consulta(ConexaoBanco,"SELECT * FROM localizacao")
+    arquivo = open('lista_localizacao.txt', 'w')
     for linha in rs:
-        localidade['text'] = linha['localidade']
-        UF['text'] = linha['uf']
-        ibge['text'] = linha['ibge']
-        ddd['text'] = linha['ddd']
-        siafi['text'] = linha['siafi']
+        arquivo.write(str(linha) + "\n")
+    arquivo.close()
 
 janela = Tk()
 
 janela.title("Busca por CEP")
 
-janela.geometry("300x250")
+janela.geometry("365x250+500+200")
 janela.resizable(False,False)
 janela.iconbitmap("images/mapa.ico")
 janela['bg'] = "pink"
@@ -40,6 +59,9 @@ cep.focus()
 
 botao = Button(janela, text="Buscar", command=lambda: checaCep(cep.get()))
 botao.grid(column=2, row=0, padx=10, pady=10)
+
+botao = Button(janela, text="Salvar", command=lambda: criaLista())
+botao.grid(column=3, row=0, padx=10, pady=10)
 
 texto_localidade = Label(janela, text="Localidade", bg="pink")
 texto_localidade.grid(column=0, row=1, padx=10, pady=10)
