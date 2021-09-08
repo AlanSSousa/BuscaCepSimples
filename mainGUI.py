@@ -4,6 +4,12 @@ from BuscaCep import *
 
 def checaCep(cepFormatado):
     try:
+
+        while(len(cepFormatado) != 8):
+            cepFormatado = cepFormatado + "0"
+            cep.insert(len(cepFormatado), "0")
+
+
         rs = ConexaoBanco.consultacep(ConexaoBanco, cepFormatado)
 
         encontrou = False
