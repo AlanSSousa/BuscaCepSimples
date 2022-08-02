@@ -9,7 +9,6 @@ def checaCep(cepFormatado):
             cepFormatado = cepFormatado + "0"
             cep.insert(len(cepFormatado), "0")
 
-
         rs = ConexaoBanco.consultacep(ConexaoBanco, cepFormatado)
 
         encontrou = False
@@ -47,7 +46,16 @@ def criaLista():
         arquivo.write(str(linha) + "\n")
     arquivo.close()
 
+def limitar_tamanho(p):
+    if len(p) > 8:
+        return False
+    return True
+
+
+
 janela = Tk()
+
+vcmd = janela.register(func=limitar_tamanho)
 
 janela.title("Busca por CEP")
 
@@ -59,7 +67,7 @@ janela['bg'] = "pink"
 texto = Label(janela, text="Digite o cep", bg="pink", fg="black")
 texto.grid(column=0, row=0, padx=10, pady=10)
 
-cep = Entry(janela)
+cep = Entry(janela, validate='key', validatecommand=(vcmd, '%P'))
 cep.grid(column=1, row=0, padx=10, pady=10)
 cep.focus()
 

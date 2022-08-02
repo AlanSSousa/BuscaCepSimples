@@ -6,4 +6,4 @@ uf varchar(2),
 ibge varchar(7), 
 ddd varchar(2), 
 siafi varchar(10)
-)
+) 

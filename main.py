@@ -12,7 +12,7 @@ while (continua) :
 
         encontrou = False
         for linha in rs:
-            encontrou = True
+            encontrou = True 
 
         if(not encontrou):
             bc = BuscaCep.getdadoscep(BuscaCep,cep)

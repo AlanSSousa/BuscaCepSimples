@@ -10,7 +10,8 @@ class BuscaCep(object):
 
     def getdadoscep(self, cep):
         url = ('http://www.viacep.com.br/ws/%s/json' % cep)
-        requisicao = requests.get(url)
+        tnc = {'chave':'parametro','chave2':'parametro2'}
+        requisicao = requests.get(url,tnc)
         if requisicao.status_code == 200:
             dados_json = json.loads(requisicao.text)
             return dados_json
